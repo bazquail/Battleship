@@ -37,8 +37,8 @@ public class BlockSetter {
                     }
                 }
                 isCheckingBlocks = false;
-                for (int i = 0; i < shipBlocks.size(); i++) { //checks every block in the new ship against used blocks
-                    if (usedBlocks.contains(shipBlocks.get(i))) {
+                for (String shipBlock : shipBlocks) { //checks every block in the new ship against used blocks
+                    if (usedBlocks.contains(shipBlock)) {
                         isCheckingBlocks = true; //makes it continue looping to try for another set of blocks
                         break;
                     }
