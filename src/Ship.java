@@ -5,8 +5,8 @@ public class Ship {
     private String name;
     private int length = 0;
 
-    public boolean isHit(String userGuess) { //checks for a hit and removes block from ship if so
-        if (blocks.contains(userGuess)) {
+    public boolean isHit(String userGuess) {
+        if (blocks.contains(userGuess)) { //checks if the ship is on a guessed block
             blocks.remove(userGuess);
             return true;
         } else {
@@ -24,7 +24,7 @@ public class Ship {
         name = inputName;
     }
     public void setLength(int shipLength) {
-        if (shipLength <= 5) {
+        if (shipLength <= 5) { //keeps ships from being too large
             length = shipLength;
         } else {
             length = 3;

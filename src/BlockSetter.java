@@ -2,53 +2,52 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class BlockSetter {
-    static ArrayList<String> usedBlocks = new ArrayList<>();
-    static ArrayList<String> possibleBlocks = new ArrayList<>();
-    static int gridSize = 0;
+    ArrayList<String> usedBlocks = new ArrayList<>();
+    ArrayList<String> possibleBlocks = new ArrayList<>();
+    int gridSize = 0;
     String[] letters = {"A", "B", "C", "D", "E", "F", "G", "H", "I"};
     String[] numbers = {"1", "2", "3", "4", "5", "6", "7", "8", "9"};
 
     public void setShipBlocks(ArrayList<Ship> ships, int shipCount) {
         gridSize = shipCount + 4;
-        int count = 1;
-        for (Ship ship : ships) { //repeats for every ship
+        for (Ship ship : ships) {
             int bound = gridSize - ship.getLength();
-            boolean isCheckingBlocks = true;
+            boolean checkingBlocks = true;
 
-            while (isCheckingBlocks) { //scraps new ship and tries again if there is a collision with an existing ship
+            while (checkingBlocks) { //loop will scrap new ship and try again if there is a collision with an existing ship
                 ArrayList<String> shipBlocks = new ArrayList<>();
                 Random randLet = new Random();
                 int randomLetter;
                 Random randNum = new Random();
                 int randomNumber;
-                boolean vertical = count % 2 == 0; //ensures equal arrangement distribution
+                boolean vertical = randNum.nextInt(100) % 2 == 0; //randomizes arrangement distribution
 
-                if (vertical) { //aligns the ship's blocks vertically in the grid
+                if (vertical) { //align current ship's blocks vertically in the grid
                     randomNumber = randNum.nextInt(gridSize);
                     randomLetter = randLet.nextInt(bound);
                     for (int i = 0; i < ship.getLength(); i++) {
                         shipBlocks.add(letters[randomLetter + i] + numbers[randomNumber]);
                     }
-                } else { //aligns the ship's blocks horizontally in the grid
+                } else { //align current ship's blocks horizontally in the grid
                     randomNumber = randNum.nextInt(bound);
                     randomLetter = randLet.nextInt(gridSize);
                     for (int i = 0; i < ship.getLength(); i++) {
                         shipBlocks.add(letters[randomLetter] + numbers[randomNumber + i]);
                     }
                 }
-                isCheckingBlocks = false;
-                for (String shipBlock : shipBlocks) { //checks every block in the new ship against used blocks
+                for (String shipBlock : shipBlocks) { //checks every block in the current ship against used blocks
                     if (usedBlocks.contains(shipBlock)) {
-                        isCheckingBlocks = true; //if one matches, makes it continue looping to try for another set of blocks
+                        checkingBlocks = true; //if one matches, break out and try another random set of blocks
                         break;
+                    } else {
+                        checkingBlocks = false;
                     }
                 }
-                if (!isCheckingBlocks) { //if no conflict, set the ship's blocks and add them to the used list
+                if (!checkingBlocks) { //if no conflict, finalize the ship and add its blocks to the used list
                     ship.setBlocks(shipBlocks);
                     usedBlocks.addAll(shipBlocks);
                 }
             }
-            count++;
         }
     }
     public void setPossibleBlocks() { //creates a list of possible blocks for a given grid size
